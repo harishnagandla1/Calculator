@@ -6,7 +6,7 @@ node {
     }
     stage('Build') {
        env.PATH = "C:/Program Files/Maven/apache-maven-3.9.7/bin;c:\\Windows\\System32"
-       bat 'mvn clean -P${Suite} package'
+       bat 'mvn clean -PSmoke package'
     }
     stage('Results') {
         archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
