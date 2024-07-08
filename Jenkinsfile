@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Preparation') {
       steps {
-        git(branch: 'main', credentialsId: 'b9ce2f10-b129-4323-aedc-1ba507a50952', url: 'https://github.com/harishnagandla1/Calculator.git')
+        git(branch: 'pipelineDeclarative', credentialsId: 'b9ce2f10-b129-4323-aedc-1ba507a50952', url: 'https://github.com/harishnagandla1/Calculator.git')
       }
     }
 
