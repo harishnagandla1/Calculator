@@ -1,7 +1,7 @@
 node {
     stage('Preparation') {
         // Get some code from a GitHub repository
-        git branch: 'main', credentialsId: 'b9ce2f10-b129-4323-aedc-1ba507a50952', url: 'https://github.com/harishnagandla1/Calculator.git'
+        git branch: 'test', credentialsId: 'b9ce2f10-b129-4323-aedc-1ba507a50952', url: 'https://github.com/harishnagandla1/Calculator.git'
     }
     stage('Build') {
        env.PATH = "C:/Program Files/Maven/apache-maven-3.9.7/bin;c:\\Windows\\System32"
