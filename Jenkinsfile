@@ -1,22 +1,33 @@
-node {
-    stage('Preparation') {
-        // Get some code from a GitHub repository
-        git branch: 'main', credentialsId: 'b9ce2f10-b129-4323-aedc-1ba507a50952', url: 'https://github.com/harishnagandla1/Calculator.git'
-    }
-    stage('Build') {
-       env.PATH = "C:/Program Files/Maven/apache-maven-3.9.7/bin;c:\\Windows\\System32"
-       bat 'mvn clean -PSmoke package'
-    }
-    stage('Results') {
-        archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
-    }
+pipeline {
+    agent any
 
-    stage('GenrateReports') {
-       publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports\\', reportFiles: '*.html', reportName: 'Extent Report', reportTitles: '', useWrapperFileDirectly: true])
-    }
+    stages {
+        stage('Preparation') {
+            steps {
+                git branch: 'main', credentialsId: 'b9ce2f10-b129-4323-aedc-1ba507a50952', url: 'https://github.com/harishnagandla1/Calculator.git'
 
-    stage('Notification') {
-     emailext body: '''Hi Team,
+            }
+        }
+       stage('Build') {
+        steps {
+            script{
+                 env.PATH = "C:/Program Files/Maven/apache-maven-3.9.7/bin;c:\\Windows\\System32"
+            }
+            bat 'mvn clean -PSmoke package'
+            }
+        }
+    stage('Archiving') {
+            steps {
+               archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
+            }
+        }
+    }
+    post('GenrateReports') {
+
+        always{
+             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports\\', reportFiles: '*.html', reportName: 'Extent Report', reportTitles: '', useWrapperFileDirectly: true])
+
+             emailext body: '''Hi Team,
 
            $DEFAULT_CONTENT
 
@@ -26,6 +37,7 @@ node {
 
        Thanks & Regards,
        Jenkins''', subject: '$DEFAULT_SUBJECT', to: 'harishnagandla1@gmail.com'
-    }
+            }
 
+    }
 }
