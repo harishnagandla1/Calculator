@@ -9,13 +9,24 @@ pipeline {
             }
         }
        stage('Build') {
-        steps {
-            script{
-                 env.PATH = "C:/Program Files/Maven/apache-maven-3.9.7/bin;c:\\Windows\\System32"
+       parallel{
+          stage('smokeTest'){
+            steps {
+                   script{
+                        env.PATH = "C:/Program Files/Maven/apache-maven-3.9.7/bin;c:\\Windows\\System32"
+                   }
+                   bat 'mvn clean -PSmoke package'
             }
-            bat 'mvn clean -PSmoke package'
-            }
+          }
+       stage('regressionTest'){
+              steps {
+                    script{
+                        env.PATH = "C:/Program Files/Maven/apache-maven-3.9.7/bin;c:\\Windows\\System32"
+                    }
+               bat 'mvn clean -PRegression package'           }
+             }
         }
+    }
     stage('Archiving') {
             steps {
                archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
